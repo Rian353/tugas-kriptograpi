@@ -1,0 +1,222 @@
+<html>
+<head>
+    <title>Tugas 1 Kriptografi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea, input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #000000;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .buttons .encrypt {
+            background-color: #e5ff00e1;
+            color: #000000;
+        }
+        .buttons .decrypt {
+            background-color: #e5ff00e1;
+            color: #000000;
+        }
+        .output {
+            background-color: #046bd3;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kriptografi</h1>
+        <label for="plaintext">Plaintext:</label>
+        <textarea id="plaintext" placeholder="Masukkan teks di sini..."></textarea>
+        
+        <label for="key">Kunci:</label>
+        <input type="text" id="key" placeholder="Masukkan kunci">
+        
+        <label for="cipher-method">Metode Cipher:</label>
+        <select id="cipher-method">
+            <option value="vigenere">Vigenere Cipher</option>
+            <option value="auto-key-vigenere">Auto-Key Vigenere Cipher</option>
+            <option value="playfair">Playfair Cipher</option>
+            <option value="hill">Hill Cipher</option>
+            <option value="super-encryption">Super Encryption</option>
+        </select>
+        
+        <label for="file-upload">Unggah File:</label>
+        <input type="file" id="file-upload">
+        
+        <div class="buttons">
+            <button class="encrypt" onclick="encrypt()">encrypt</button>
+            <button class="decrypt" onclick="decrypt()">Decrypt</button>
+        </div>
+        
+        <div class="output">
+            <strong>Output:</strong>
+            <p id="output-text"></p>
+        </div>
+    </div>
+
+    <script>
+        function vigenereEncrypt(plaintext, key) {
+            let encryptedText = '';
+            key = key.toUpperCase();
+            for (let i = 0, j = 0; i < plaintext.length; i++) {
+                const c = plaintext.charCodeAt(i);
+                if (c >= 65 && c <= 90) {
+                    encryptedText += String.fromCharCode((c - 65 + key.charCodeAt(j % key.length) - 65) % 26 + 65);
+                    j++;
+                } else if (c >= 97 && c <= 122) {
+                    encryptedText += String.fromCharCode((c - 97 + key.charCodeAt(j % key.length) - 65) % 26 + 97);
+                    j++;
+                } else {
+                    encryptedText += plaintext.charAt(i);
+                }
+            }
+            return encryptedText;
+        }
+
+        function vigenereDecrypt(ciphertext, key) {
+            let decryptedText = '';
+            key = key.toUpperCase();
+            for (let i = 0, j = 0; i < ciphertext.length; i++) {
+                const c = ciphertext.charCodeAt(i);
+                if (c >= 65 && c <= 90) {
+                    decryptedText += String.fromCharCode((c - 65 - (key.charCodeAt(j % key.length) - 65) + 26) % 26 + 65);
+                    j++;
+                } else if (c >= 97 && c <= 122) {
+                    decryptedText += String.fromCharCode((c - 97 - (key.charCodeAt(j % key.length) - 65) + 26) % 26 + 97);
+                    j++;
+                } else {
+                    decryptedText += ciphertext.charAt(i);
+                }
+            }
+            return decryptedText;
+        }
+
+        function autoKeyVigenereEncrypt(plaintext, key) {
+            let extendedKey = key + plaintext;
+            return vigenereEncrypt(plaintext, extendedKey);
+        }
+
+        function autoKeyVigenereDecrypt(ciphertext, key) {
+            let decryptedText = vigenereDecrypt(ciphertext, key);
+            return decryptedText;
+        }
+
+        function playfairEncrypt(plaintext, key) {
+            // Implement Playfair Cipher encryption
+            return plaintext; // Placeholder
+        }
+
+        function playfairDecrypt(ciphertext, key) {
+            // Implement Playfair Cipher decryption
+            return ciphertext; // Placeholder
+        }
+
+        function hillEncrypt(plaintext, key) {
+            // Implement Hill Cipher encryption
+            return plaintext; // Placeholder
+        }
+
+        function hillDecrypt(ciphertext, key) {
+            // Implement Hill Cipher decryption
+            return ciphertext; // Placeholder
+        }
+
+        function superEncryptionEncrypt(plaintext, key) {
+            // Implement Super Encryption (Vigenere + Transposition)
+            return plaintext; // Placeholder
+        }
+
+        function superEncryptionDecrypt(ciphertext, key) {
+            // Implement Super Encryption (Vigenere + Transposition)
+            return ciphertext; // Placeholder
+        }
+
+        function encrypt() {
+            const plaintext = document.getElementById('plaintext').value;
+            const key = document.getElementById('key').value;
+            const method = document.getElementById('cipher-method').value;
+
+            let encryptedText = '';
+            if (method === 'vigenere') {
+                encryptedText = vigenereEncrypt(plaintext, key);
+            } else if (method === 'auto-key-vigenere') {
+                encryptedText = autoKeyVigenereEncrypt(plaintext, key);
+            } else if (method === 'playfair') {
+                encryptedText = playfairEncrypt(plaintext, key);
+            } else if (method === 'hill') {
+                encryptedText = hillEncrypt(plaintext, key);
+            } else if (method === 'super-encryption') {
+                encryptedText = superEncryptionEncrypt(plaintext, key);
+            }
+
+            document.getElementById('output-text').innerText = encryptedText;
+        }
+
+        function decrypt() {
+            const ciphertext = document.getElementById('plaintext').value;
+            const key = document.getElementById('key').value;
+            const method = document.getElementById('cipher-method').value;
+
+            let decryptedText = '';
+            if (method === 'vigenere') {
+                decryptedText = vigenereDecrypt(ciphertext, key);
+            } else if (method === 'auto-key-vigenere') {
+                decryptedText = autoKeyVigenereDecrypt(ciphertext, key);
+            } else if (method === 'playfair') {
+                decryptedText = playfairDecrypt(ciphertext, key);
+            } else if (method === 'hill') {
+                decryptedText = hillDecrypt(ciphertext, key);
+            } else if (method === 'super-encryption') {
+                decryptedText = superEncryptionDecrypt(ciphertext, key);
+            }
+
+            document.getElementById('output-text').innerText = decryptedText;
+        }
+    </script>
+</body>
+</html>
